@@ -1,10 +1,12 @@
+"use client"
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 import { FaCartShopping } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
+    const route = useRouter();
     const navItems = [
         {
             title: 'Home',
@@ -27,6 +29,11 @@ const Navbar = () => {
             path: "/contact"
         },
     ]
+
+    const handleSignIn = () => {
+        route.push('/signin')
+    }
+
     return (
         <div className='bg-base-100 text-slate-900'>
             <div className="navbar container mx-auto">
@@ -78,6 +85,7 @@ const Navbar = () => {
                         <FaCartShopping className='text-xl'/>
                         <FaSearch className='text-xl'/>
                         <a className="btn btn-outline btn-primary">Appointment</a>
+                        <button onClick={handleSignIn} className='btn btn-primary'>Sign In</button>
                     </div>
                 </div>
             </div>
