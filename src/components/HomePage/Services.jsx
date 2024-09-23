@@ -1,8 +1,9 @@
 import React from 'react';
-import {servicesData} from "../../lib/services/servicesData"
 import Card from '../Card/Card';
+import { getServices } from '@/services/getServices';
 
-const Services = () => {
+const Services = async () => {
+    const {res} = await getServices();
     return (
         <div>
             <div className='text-center space-y-4'>
@@ -12,7 +13,7 @@ const Services = () => {
             </div>
             <div className='mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
                 {
-                    servicesData.map(services => (
+                    res?.length > 0 && res?.map(services => (
                         <Card key={services} services={services}/>
                     ))
                 }

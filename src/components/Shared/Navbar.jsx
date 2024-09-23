@@ -4,32 +4,11 @@ import Link from 'next/link';
 import { FaCartShopping } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
 
 const Navbar = () => {
     const route = useRouter();
-    const navItems = [
-        {
-            title: 'Home',
-            path: "/"
-        },
-        {
-            title: 'About',
-            path: "/about"
-        },
-        {
-            title: 'Services',
-            path: "/services"
-        },
-        {
-            title: 'Blog',
-            path: "/blog"
-        },
-        {
-            title: 'Contact',
-            path: "/contact"
-        },
-    ]
-
+    const session = useSession();
     const handleSignIn = () => {
         route.push('/signin')
     }
@@ -82,15 +61,44 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-end">
                     <div className='flex items-center space-x-3'>
-                        <FaCartShopping className='text-xl'/>
-                        <FaSearch className='text-xl'/>
+                        <FaCartShopping className='text-xl' />
+                        <FaSearch className='text-xl' />
                         <a className="btn btn-outline btn-primary">Appointment</a>
-                        <button onClick={handleSignIn} className='btn btn-primary'>Sign In</button>
+                        {
+                            session.data ? <button onClick={() => signOut()} className='btn btn-primary'>Sign Out</button> : <button onClick={handleSignIn} className='btn btn-primary'>Sign In</button>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     );
 };
+
+const navItems = [
+    {
+        title: 'Home',
+        path: "/"
+    },
+    {
+        title: 'About',
+        path: "/about"
+    },
+    {
+        title: 'Services',
+        path: "/services"
+    },
+    {
+        title: 'My Booking',
+        path: "/booking"
+    },
+    {
+        title: 'Blog',
+        path: "/blog"
+    },
+    {
+        title: 'Contact',
+        path: "/contact"
+    },
+]
 
 export default Navbar;

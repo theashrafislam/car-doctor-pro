@@ -12,7 +12,7 @@ export const connectDB = async () => {
                 deprecationErrors: true,
             }
         });
-        db = client.db('carDoctor');
+        db = client.db('car-doctor');
         return db;
     } catch (error) {
         console.log(error);

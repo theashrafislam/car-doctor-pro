@@ -1,14 +1,36 @@
 "use client"
+import SocialButton from '@/components/Shared/SocialButton';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { FaFacebook, FaInstagram } from 'react-icons/fa6';
-import { FcGoogle } from "react-icons/fc";
 
 const page = () => {
 
-    const handleSignUp = () => {
+    const handleSignUp = async (event) => {
+        event.preventDefault();
+        const user = {
+            name: event.target.name.value,
+            email: event.target.email.value,
+            password: event.target.password.value,
+        };
 
+        const res = await fetch('http://localhost:3000/signup/api', {
+            method: "POST",
+            body: JSON.stringify(user),
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+        if (res.status === 200) {
+            event.target.reset();
+            alert('User Create Successfully.')
+        }
+        else if (res.status === 409) {
+            alert('The email already exist.')
+        }
+        else {
+            alert('Something went wrong.')
+        }
     }
 
     return (
@@ -40,11 +62,7 @@ const page = () => {
                     </form>
                     <div className='mt-8 flex flex-col justify-center items-center gap-5'>
                         <p className='text-center'>Or Sign In With</p>
-                        <div className='flex gap-3 items-center justify-center'>
-                            <FaFacebook className='text-2xl' />
-                            <FaInstagram className='text-2xl' />
-                            <FcGoogle className='text-2xl' />
-                        </div>
+                        <SocialButton/>
                         <p>Already have an account? <Link href={'/signin'} className='font-bold text-primary'>Sign In</Link></p>
                     </div>
                 </div>

@@ -1,14 +1,30 @@
 "use client"
 import Image from 'next/image';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 import React from 'react';
-import { FaFacebook, FaInstagram } from 'react-icons/fa6';
-import { FcGoogle } from "react-icons/fc";
+import { useRouter } from 'next/navigation';
+import SocialButton from '@/components/Shared/SocialButton';
 
 const page = () => {
+    const router = useRouter();
+    const handleSignIn = async (e) => {
+        e.preventDefault()
+        const email = e.target.email.value;
+        const password = e.target.password.value;
 
-    const handleSignIn = () => {
-        
+        const resp = await signIn('credentials', {
+            email,
+            password,
+            redirect: false
+        })
+        if(resp.status === 200){
+            alert('Welcome! User Login Successfully.')
+            router.push('/')
+        }
+        else{
+            alert("Something went wrong.")
+        }
     }
 
     return (
@@ -23,24 +39,20 @@ const page = () => {
                     <form onSubmit={handleSignIn}>
                         <div className='flex flex-col gap-2 mb-3'>
                             <label htmlFor="email">Email</label>
-                            <input type="email" placeholder="Enter your email" className="input input-bordered w-full" />
+                            <input type="email" name='email' placeholder="Enter your email" className="input input-bordered w-full" />
                         </div>
 
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="password">Confirm Password</label>
-                            <input type="password" placeholder="Enter your password" className="input input-bordered w-full" />
+                            <input type="password" name='password' placeholder="Enter your password" className="input input-bordered w-full" />
                         </div>
 
                         <button type='submit' className="btn btn-primary mt-9 w-full">Sing In</button>
                     </form>
                     <div className='mt-8 flex flex-col justify-center items-center gap-5'>
                         <p className='text-center'>Or Sign In With</p>
-                        <div className='flex gap-3 items-center justify-center'>
-                            <FaFacebook className='text-2xl' />
-                            <FaInstagram className='text-2xl' />
-                            <FcGoogle className='text-2xl' />
-                        </div>
-                        <p>Have an account? <Link href={'/signup'} className='font-bold text-primary'>Sign In</Link></p>
+                        <SocialButton/>
+                        <p>Have an account? <Link href={'/signup'} className='font-bold text-primary'>Sign Up</Link></p>
                     </div>
                 </div>
             </div>
