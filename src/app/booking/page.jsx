@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const page = () => {
+const Page = () => {
     const session = useSession();
     const { data } = session;
     const [bookings, setBookings] = useState([]);
@@ -94,4 +94,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 
-const page = ({ params }) => {
+const Page = ({ params }) => {
 
     const { data } = useSession();
     const [booking, setBooking] = useState([]);
@@ -150,4 +150,4 @@ const page = ({ params }) => {
     );
 };
 
-export default page;
+export default Page;

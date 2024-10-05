@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
@@ -6,29 +6,30 @@ import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SocialButton from '@/components/Shared/SocialButton';
 
-const page = () => {
+const SignInPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const path = searchParams.get('redirect');
+
     const handleSignIn = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
 
         const resp = await signIn('credentials', {
             email,
             password,
-            redirect: true,
+            redirect: false,  // Change this to false to handle redirection manually
             callbackUrl: path ? path : '/'
-        })
-        if(resp.status === 200){
-            alert('Welcome! User Login Successfully.')
-            router.push('/')
+        });
+
+        if (resp?.error) {
+            alert("Login failed: " + resp.error); // More specific error handling
+        } else {
+            alert('Welcome! User logged in successfully.');
+            router.push(path || '/');  // Redirect to the original path or home
         }
-        else{
-            alert("Something went wrong.")
-        }
-    }
+    };
 
     return (
         <div className='container mx-auto py-24'>
@@ -42,20 +43,33 @@ const page = () => {
                     <form onSubmit={handleSignIn}>
                         <div className='flex flex-col gap-2 mb-3'>
                             <label htmlFor="email">Email</label>
-                            <input type="email" name='email' placeholder="Enter your email" className="input input-bordered w-full" />
+                            <input 
+                                type="email" 
+                                name='email' 
+                                placeholder="Enter your email" 
+                                className="input input-bordered w-full" 
+                                required 
+                            />
                         </div>
 
                         <div className='flex flex-col gap-2'>
-                            <label htmlFor="password">Confirm Password</label>
-                            <input type="password" name='password' placeholder="Enter your password" className="input input-bordered w-full" />
+                            <label htmlFor="password">Password</label>
+                            <input 
+                                type="password" 
+                                name='password' 
+                                placeholder="Enter your password" 
+                                className="input input-bordered w-full" 
+                                required 
+                            />
                         </div>
 
-                        <button type='submit' className="btn btn-primary mt-9 w-full">Sing In</button>
+                        <button type='submit' className="btn btn-primary mt-9 w-full">Sign In</button>
                     </form>
+
                     <div className='mt-8 flex flex-col justify-center items-center gap-5'>
                         <p className='text-center'>Or Sign In With</p>
-                        <SocialButton/>
-                        <p>Have an account? <Link href={'/signup'} className='font-bold text-primary'>Sign Up</Link></p>
+                        <SocialButton />
+                        <p>Don&apos;t have an account? <Link href={'/signup'} className='font-bold text-primary'>Sign Up</Link></p>
                     </div>
                 </div>
             </div>
@@ -63,4 +77,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default SignInPage;

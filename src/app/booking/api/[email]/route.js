@@ -1,4 +1,5 @@
 import { connectDB } from "@/lib/connectDB"
+import { NextResponse } from "next/server";
 
 export const GET = async (request, {params}) => {
     console.log(params);
@@ -6,8 +7,8 @@ export const GET = async (request, {params}) => {
     const bookingCollection = await db.collection('booking');
     try {
         const res = await bookingCollection.find({email: params?.email}).toArray();
-        return Response.json({res})
+        return NextResponse.json({res})
     } catch (error) {
-        return Response.json({message: "Something went wrong"}, {status: 200})
+        return NextResponse.json({message: "Something went wrong"}, {status: 200})
     }
 }
