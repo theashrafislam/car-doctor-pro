@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const page = () => {
     const session = useSession();
@@ -16,20 +17,16 @@ const page = () => {
     }
 
     const handleDelete = async (id) => {
-        const deleted = await fetch(`http://localhost:3000/booking/api/delete-booking/${id}`, {
+        const deleted = await fetch(`http://localhost:3000/booking/api/handle-booking/${id}`, {
             method: "DELETE",
-            // headers: {
-            //     "content-type": "application/json"
-            // }
         });
         const res = await deleted.json()
-        console.log(res);
-        if(res.response.deletedCount > 0){
+        if(res.res.deletedCount > 0){
             loadedData()
-            alert('Your booking delete successfully.')
+            toast.success('Your booking delete successfully.')
         }
         else{
-            alert('Delete no successfully.')
+            toast.error('Delete no successfully.')
         }
     }
 
@@ -78,7 +75,7 @@ const page = () => {
                                     <td>{date}</td>
                                     <td>
                                         <div className="flex items-center space-x-3">
-                                            <Link href={`/my-bookings/update/${''}`}><button class="btn btn-primary">Edit</button></Link>
+                                            <Link href={`/booking/update/${_id}`}><button class="btn btn-primary">Edit</button></Link>
                                             <button
                                                 onClick={() => handleDelete(_id)}
                                                 class="btn btn-error"

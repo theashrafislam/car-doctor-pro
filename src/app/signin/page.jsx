@@ -3,11 +3,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import SocialButton from '@/components/Shared/SocialButton';
 
 const page = () => {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const path = searchParams.get('redirect');
     const handleSignIn = async (e) => {
         e.preventDefault()
         const email = e.target.email.value;
@@ -16,7 +18,8 @@ const page = () => {
         const resp = await signIn('credentials', {
             email,
             password,
-            redirect: false
+            redirect: true,
+            callbackUrl: path ? path : '/'
         })
         if(resp.status === 200){
             alert('Welcome! User Login Successfully.')
